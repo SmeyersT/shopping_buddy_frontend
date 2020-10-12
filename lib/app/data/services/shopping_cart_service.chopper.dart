@@ -17,10 +17,35 @@ class _$ShoppingCartService extends ShoppingCartService {
   final definitionType = ShoppingCartService;
 
   @override
-  Future<Response<ShoppingCart>> updateShoppingCart(ShoppingCart shoppingCart) {
+  Future<Response<ShoppingCart>> updateShoppingCart(
+      [String idToken, ShoppingCart shoppingCart]) {
     final $url = '/shoppingCart/updateShoppingCart';
+    final $headers = {'Authorization': idToken};
     final $body = shoppingCart;
-    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<ShoppingCart, ShoppingCart>($request);
+  }
+
+  @override
+  Future<Response<ShoppingCart>> addCartItem(
+      [String idToken, ShoppingCartWithItemWrapper wrapper]) {
+    final $url = '/shoppingCart/addCartItem';
+    final $headers = {'Authorization': idToken};
+    final $body = wrapper;
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<ShoppingCart, ShoppingCart>($request);
+  }
+
+  @override
+  Future<Response<ShoppingCart>> removeCartItem(
+      [String idToken, ShoppingCartWithItemWrapper wrapper]) {
+    final $url = '/shoppingCart/removeCartItem';
+    final $headers = {'Authorization': idToken};
+    final $body = wrapper;
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
     return client.send<ShoppingCart, ShoppingCart>($request);
   }
 }

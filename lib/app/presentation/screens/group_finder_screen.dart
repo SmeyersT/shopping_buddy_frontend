@@ -88,7 +88,7 @@ class _GroupFinderScreenState extends State<GroupFinderScreen> {
           child: Row(
             children: <Widget>[
               CircularProfileAvatar(
-                "group imgUrl here",
+                group.imgUrl,
                 placeHolder: (context, string) { return Image(image: AssetImage("./assets/group_profile_placeholder.png"));},
                 borderColor: primaryColor,
                 borderWidth: 2.0,
@@ -154,7 +154,7 @@ class _GroupFinderScreenState extends State<GroupFinderScreen> {
   void _onJoinGroup(Group group) async {
     GroupMember newGroupMember = new GroupMember(0, GroupRole.MEMBER, _userStore.currentUser, group);
     await _groupMemberStore.createNewGroupMember(newGroupMember);
-    _groupStore.getUserGroups(_userStore.currentUser);
+    _groupStore.getUserGroups();
     _groupStore.searchGroups(_searchController.text);
   }
 

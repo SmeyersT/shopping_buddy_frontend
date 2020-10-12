@@ -5,7 +5,7 @@ class CustomAppBar  {
 
   static getAppBar() {
     return AppBar(
-      title: Text("ShoppingList"),
+      title: Text("ShoppingBuddy"),
       automaticallyImplyLeading: false,
       backgroundColor: primaryColor,
       actions: <Widget>[

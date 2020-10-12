@@ -23,6 +23,7 @@ abstract class AuthenticationService extends ChopperService {
   Future<Response> postGoogleLogin(
       @Header("Authorization") String idToken
       );
+
   @Post(path: '/refresh')
   Future<Response> refreshJWT(
       @Header("Authorization") String jwt

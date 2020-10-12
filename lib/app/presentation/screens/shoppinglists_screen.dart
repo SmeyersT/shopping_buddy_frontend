@@ -1,19 +1,14 @@
-
-
-import 'dart:ffi';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:shopping_buddy_frontend/app/domain/shopping_cart.dart';
 import 'package:shopping_buddy_frontend/app/domain/shopping_cart_item.dart';
 import 'package:shopping_buddy_frontend/app/presentation/stores/group_store.dart';
-import 'package:shopping_buddy_frontend/app/presentation/stores/navigation_store.dart';
 import 'package:shopping_buddy_frontend/app/presentation/stores/shopping_cart_store.dart';
 import 'package:shopping_buddy_frontend/app/presentation/stores/user_store.dart';
 import 'package:shopping_buddy_frontend/app/presentation/widgets/custom_app_bar.dart';
 import 'package:shopping_buddy_frontend/app/presentation/widgets/custom_bottom_nav_bar.dart';
+import 'package:shopping_buddy_frontend/app/presentation/widgets/custom_drawer.dart';
 import 'package:shopping_buddy_frontend/app/presentation/widgets/quit_alert_dialog.dart';
 import 'package:shopping_buddy_frontend/core/di/service_locator.dart';
 import 'package:shopping_buddy_frontend/core/values/colors.dart';
@@ -41,7 +36,7 @@ class _ShoppingListsScreenState extends State<ShoppingListsScreen> {
       print("Retrieving current user.");
     }
     if(_groupStore.userGroups == null) {
-      await _groupStore.getUserGroups(_userStore.currentUser);
+      await _groupStore.getUserGroups();
       print("Retrieving user groups.");
     }
   }
@@ -61,60 +56,68 @@ class _ShoppingListsScreenState extends State<ShoppingListsScreen> {
             color: Colors.white,
             width: size.width,
             child: Padding(
-              padding: const EdgeInsetsDirectional.only(start: 0.0, end: 0.0, top: 16.0),
-              child: ListView(
-                children: <Widget>[
-                  Container(
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsetsDirectional.only(start: 8.0),
-                        child: Text(
-                            _userStore.currentUser.firstName + "'s shoppinglist",
-                          style: TextStyle(fontSize: 20, color: primaryColor),
+              padding: const EdgeInsetsDirectional.only(start: 0.0, end: 0.0, top: 0.0),
+              child: NotificationListener(
+                onNotification: (OverscrollIndicatorNotification overscroll) {
+                  overscroll.disallowGlow();
+                  return true;
+                },
+                child: ListView(
+                  children: <Widget>[
+                    SizedBox(height: 16.0),
+                    Container(
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsetsDirectional.only(start: 8.0),
+                          child: Text(
+                              "Mijn boodschappenlijstje",
+                            style: TextStyle(fontSize: 20, color: primaryColor),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 8.0),
-                  _buildPersonalShoppingList(),
-                  _buildGroupShoppingLists(),
-                ],
+                    SizedBox(height: 8.0),
+                    _buildPersonalShoppingList(),
+                    _buildGroupShoppingLists(),
+                  ],
+                ),
               ),
             ),
           ),
+          drawer: CustomDrawer(),
           bottomNavigationBar: CustomBottomNavBar(),
-          floatingActionButton: FabCircularMenu(
-            fabColor: primaryColor,
-            ringColor: primaryColor,
-            //ringDiameter: 500.0,
-            fabOpenIcon: const Icon(Icons.menu, color: Colors.white),
-            fabCloseIcon: const Icon(
-              Icons.close,
-              color: Colors.white,
-            ),
-            children: <Widget>[
-              IconButton(
-                icon: Icon(Icons.home),
-                onPressed: () {
-                  print("1");
-                },
-              ),
-              Text("test"),
-              IconButton(
-                icon: Icon(Icons.shopping_cart),
-                onPressed: () {
-                  print("2");
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.group),
-                onPressed: () {
-                  print("3");
-                },
-              )
-            ],
-          ),
+          // floatingActionButton: FabCircularMenu(
+          //   fabColor: primaryColor,
+          //   ringColor: primaryColor,
+          //   //ringDiameter: 500.0,
+          //   fabOpenIcon: const Icon(Icons.menu, color: Colors.white),
+          //   fabCloseIcon: const Icon(
+          //     Icons.close,
+          //     color: Colors.white,
+          //   ),
+          //   children: <Widget>[
+          //     IconButton(
+          //       icon: Icon(Icons.home),
+          //       onPressed: () {
+          //         print("1");
+          //       },
+          //     ),
+          //     Text("test"),
+          //     IconButton(
+          //       icon: Icon(Icons.shopping_cart),
+          //       onPressed: () {
+          //         print("2");
+          //       },
+          //     ),
+          //     IconButton(
+          //       icon: Icon(Icons.group),
+          //       onPressed: () {
+          //         print("3");
+          //       },
+          //     )
+          //   ],
+          // ),
         ),
       ),
     );
@@ -139,7 +142,7 @@ class _ShoppingListsScreenState extends State<ShoppingListsScreen> {
                   child: Padding(
                     padding: const EdgeInsetsDirectional.only(start: 8.0),
                     child: Text(
-                        _groupStore.userGroups[index].name + "'s shoppinglist",
+                        _groupStore.userGroups[index].name,
                       style: TextStyle(fontSize: 20.0, color: primaryColor),
                     ),
                   ),
@@ -163,6 +166,7 @@ class _ShoppingListsScreenState extends State<ShoppingListsScreen> {
       padding: const EdgeInsetsDirectional.only(start: 8.0, end: 8.0),
       child: ListView.builder(
         shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
         itemCount: shoppingCart.items.length,
         itemBuilder: (context, index) {
           return _buildShoppingListItem(shoppingCart, index);
@@ -243,8 +247,8 @@ class _ShoppingListsScreenState extends State<ShoppingListsScreen> {
   }
 
   void _onRemoveShoppingItem(ShoppingCart shoppingCart, int itemIndex) async {
+    await _shoppingCartStore.removeItemFromCart(shoppingCart, shoppingCart.items[itemIndex]);
     shoppingCart.items.removeAt(itemIndex);
-    await _shoppingCartStore.updateShoppingCart(shoppingCart);
     setState(() {});
   }
 

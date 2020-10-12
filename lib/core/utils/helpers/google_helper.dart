@@ -38,11 +38,11 @@ class GoogleHelper {
     return 'Bearer $jwt';
   }
 
-  //regular print() cuts idtoken in half
-  void printWrapped(String text) {
-    final pattern = new RegExp('.{1,800}'); // 800 is the size of each chunk
-    pattern.allMatches(text).forEach((match) => print(match.group(0)));
-  }
+  // //regular print() cuts idtoken in half
+  // void printWrapped(String text) {
+  //   final pattern = new RegExp('.{1,800}'); // 800 is the size of each chunk
+  //   pattern.allMatches(text).forEach((match) => print(match.group(0)));
+  // }
 
   Future<bool> signInWithGoogle() async {
     currentUser = await googleSignIn.signIn();

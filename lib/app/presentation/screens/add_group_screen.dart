@@ -63,12 +63,12 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
   @override
   void dispose() {
     _nameController.dispose();
-    _descriptionController.dispose();
+    _imageUrlController.dispose();
     super.dispose();
   }
 
   final _nameController = TextEditingController();
-  final _descriptionController = TextEditingController();
+  final _imageUrlController = TextEditingController();
   Widget _buildForm(Size size) {
     return Container(
       width: size.width * 0.9,
@@ -103,11 +103,10 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
             ),
             SizedBox(height: 12.0),
             TextFormField(
-              minLines: 4,
-              maxLines: 4,
-              controller: _descriptionController,
+              controller: _imageUrlController,
+              maxLines: 1,
               decoration: InputDecoration(
-                labelText: "Beschrijving",
+                labelText: "Afbeelding",
                 labelStyle: TextStyle(color: primaryColor),
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: primaryColor),
@@ -122,7 +121,7 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
               cursorColor: primaryColor,
               validator: (value) {
                 if (value.isEmpty) {
-                  return 'Please enter some text';
+                  return 'Please enter an imageUrl.';
                 }
                 return null;
               },
@@ -161,13 +160,13 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
   }
 
   _onSubmitGroup() async {
-    Group group = new Group(0, _nameController.text, _descriptionController.text, new List<GroupMember>(), new ShoppingCart(0, false, DateTime.now(), new List<ShoppingCartItem>(), false));
+    Group group = new Group(0, _nameController.text, _imageUrlController.text, new List<GroupMember>(), new ShoppingCart(0, false, DateTime.now(), new List<ShoppingCartItem>(), false));
     await _groupStore.createNewGroup(group);
 //    GroupMember groupMember = new GroupMember(0, GroupRole.OWNER, _userStore.currentUser, _groupStore.createdGroup);
     print(_groupStore.createdGroup.toString());
     GroupMember groupMember = new GroupMember(0, GroupRole.OWNER, _userStore.currentUser, _groupStore.createdGroup);
     await _groupMemberStore.createNewGroupMember(groupMember);
-    _groupStore.getUserGroups(_userStore.currentUser);
+    _groupStore.getUserGroups();
     Navigator.pop(context);
   }
 

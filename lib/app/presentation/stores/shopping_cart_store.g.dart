@@ -17,20 +17,19 @@ mixin _$ShoppingCartStore on _ShoppingCartStoreBase, Store {
               name: '_ShoppingCartStoreBase.getShoppingCartState'))
       .value;
 
-  final _$_updatedShoppingCartAtom =
-      Atom(name: '_ShoppingCartStoreBase._updatedShoppingCart');
+  final _$updatedShoppingCartAtom =
+      Atom(name: '_ShoppingCartStoreBase.updatedShoppingCart');
 
   @override
-  ShoppingCart get _updatedShoppingCart {
-    _$_updatedShoppingCartAtom.reportRead();
-    return super._updatedShoppingCart;
+  ShoppingCart get updatedShoppingCart {
+    _$updatedShoppingCartAtom.reportRead();
+    return super.updatedShoppingCart;
   }
 
   @override
-  set _updatedShoppingCart(ShoppingCart value) {
-    _$_updatedShoppingCartAtom.reportWrite(value, super._updatedShoppingCart,
-        () {
-      super._updatedShoppingCart = value;
+  set updatedShoppingCart(ShoppingCart value) {
+    _$updatedShoppingCartAtom.reportWrite(value, super.updatedShoppingCart, () {
+      super.updatedShoppingCart = value;
     });
   }
 
@@ -55,6 +54,7 @@ mixin _$ShoppingCartStore on _ShoppingCartStoreBase, Store {
   @override
   String toString() {
     return '''
+updatedShoppingCart: ${updatedShoppingCart},
 getShoppingCartState: ${getShoppingCartState}
     ''';
   }

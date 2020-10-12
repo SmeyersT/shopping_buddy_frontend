@@ -112,6 +112,22 @@ mixin _$GroupStore on _GroupStoreBase, Store {
     });
   }
 
+  final _$_deleteGroupFutureAtom =
+      Atom(name: '_GroupStoreBase._deleteGroupFuture');
+
+  @override
+  ObservableFuture<Response<dynamic>> get _deleteGroupFuture {
+    _$_deleteGroupFutureAtom.reportRead();
+    return super._deleteGroupFuture;
+  }
+
+  @override
+  set _deleteGroupFuture(ObservableFuture<Response<dynamic>> value) {
+    _$_deleteGroupFutureAtom.reportWrite(value, super._deleteGroupFuture, () {
+      super._deleteGroupFuture = value;
+    });
+  }
+
   @override
   String toString() {
     return '''

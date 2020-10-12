@@ -5,6 +5,7 @@ import 'package:chopper/chopper.dart';
 import 'package:http/io_client.dart';
 import 'package:shopping_buddy_frontend/app/domain/user.dart';
 import 'package:shopping_buddy_frontend/core/utils/converters/json_to_type_converter.dart';
+import 'package:shopping_buddy_frontend/core/utils/interceptors/jwt_interceptor.dart';
 import 'package:shopping_buddy_frontend/core/values/globals.dart';
 
 part 'user_service.chopper.dart';
@@ -22,12 +23,14 @@ abstract class UserService extends ChopperService {
       converter: JsonToTypeConverter(
         {User: (jsonData) => User.fromJson(jsonData)}
       ),
-      //interceptors: [JWTInterceptor()]
+      interceptors: [JWTInterceptor()]
       );
     return _$UserService(client);
   }
 
   @Get(path: '/getCurrentUser')
-  Future<Response<User>> getCurrentUser();
+  Future<Response<User>> getCurrentUser([
+    @Header('Authorization') String idToken
+  ]);
 
 }

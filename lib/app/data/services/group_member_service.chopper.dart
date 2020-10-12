@@ -17,18 +17,24 @@ class _$GroupMemberService extends GroupMemberService {
   final definitionType = GroupMemberService;
 
   @override
-  Future<Response<GroupMember>> createNewGroupMember(GroupMember groupMember) {
+  Future<Response<GroupMember>> createNewGroupMember(
+      [String idToken, GroupMember groupMember]) {
     final $url = '/groupMember/createGroupMember';
+    final $headers = {'Authorization': idToken};
     final $body = groupMember;
-    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
     return client.send<GroupMember, GroupMember>($request);
   }
 
   @override
-  Future<Response<GroupMember>> removeGroupMember(int groupMemberId) {
+  Future<Response<GroupMember>> removeGroupMember(
+      [String idToken, int groupMemberId]) {
     final $url = '/groupMember/deleteGroupMember';
+    final $headers = {'Authorization': idToken};
     final $body = groupMemberId;
-    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
     return client.send<GroupMember, GroupMember>($request);
   }
 }

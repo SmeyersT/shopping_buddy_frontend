@@ -17,26 +17,41 @@ class _$GroupService extends GroupService {
   final definitionType = GroupService;
 
   @override
-  Future<Response<Group>> createNewGroup(Group group) {
+  Future<Response<Group>> createNewGroup([String idToken, Group group]) {
     final $url = '/group/createNewGroup';
+    final $headers = {'Authorization': idToken};
     final $body = group;
-    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
     return client.send<Group, Group>($request);
   }
 
   @override
-  Future<Response<List<Group>>> getGroupsByUser(User user) {
+  Future<Response<List<Group>>> getGroupsByUser([String idToken]) {
     final $url = '/group/getGroupsByUser';
-    final $body = user;
-    final $request = Request('GET', $url, client.baseUrl, body: $body);
+    final $headers = {'Authorization': idToken};
+    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
     return client.send<List<Group>, Group>($request);
   }
 
   @override
-  Future<Response<List<Group>>> searchGroups(String searchInput) {
+  Future<Response<List<Group>>> searchGroups(
+      [String idToken, String searchInput]) {
     final $url = '/group/searchGroups';
+    final $headers = {'Authorization': idToken};
     final $body = searchInput;
-    final $request = Request('GET', $url, client.baseUrl, body: $body);
+    final $request =
+        Request('GET', $url, client.baseUrl, body: $body, headers: $headers);
     return client.send<List<Group>, Group>($request);
+  }
+
+  @override
+  Future<Response<Group>> deleteGroup([String idToken, Group group]) {
+    final $url = '/group/deleteGroup';
+    final $headers = {'Authorization': idToken};
+    final $body = group;
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<Group, Group>($request);
   }
 }

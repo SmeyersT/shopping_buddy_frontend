@@ -7,6 +7,8 @@ import 'package:shopping_buddy_frontend/app/presentation/stores/group_store.dart
 import 'package:shopping_buddy_frontend/app/presentation/stores/navigation_store.dart';
 import 'package:shopping_buddy_frontend/app/presentation/stores/user_store.dart';
 import 'package:shopping_buddy_frontend/app/presentation/widgets/custom_app_bar.dart';
+import 'package:shopping_buddy_frontend/app/presentation/widgets/custom_bottom_nav_bar.dart';
+import 'package:shopping_buddy_frontend/app/presentation/widgets/custom_drawer.dart';
 import 'package:shopping_buddy_frontend/app/presentation/widgets/quit_alert_dialog.dart';
 import 'package:shopping_buddy_frontend/core/di/service_locator.dart';
 import 'package:shopping_buddy_frontend/core/values/colors.dart';
@@ -25,7 +27,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
   @override
   void initState() {
     if(_groupStore.userGroups == null) {
-      _groupStore.getUserGroups(_userStore.currentUser);
+      _groupStore.getUserGroups();
     }
     super.initState();
   }
@@ -100,29 +102,8 @@ class _GroupsScreenState extends State<GroupsScreen> {
               ],
             )
           ),
-          bottomNavigationBar: Observer(
-            builder: (context) {
-              return BottomNavigationBar(
-                selectedItemColor: primaryColor,
-                currentIndex: _navStore.tabIndex,
-                onTap: (index) {_navStore.setTabIndex(index, context);},
-                items: const <BottomNavigationBarItem>[
-                  BottomNavigationBarItem(
-                      icon: Icon(Icons.home),
-                      title: Text("Home")
-                  ),
-                  BottomNavigationBarItem(
-                      icon: Icon(Icons.shopping_cart),
-                      title: Text("Lists")
-                  ),
-                  BottomNavigationBarItem(
-                      icon: Icon(Icons.people),
-                      title: Text("Groups")
-                  )
-                ],
-              );
-            },
-          ),
+          drawer: CustomDrawer(),
+          bottomNavigationBar: CustomBottomNavBar()
         ),
       ),
     );
@@ -156,7 +137,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
           children: <Widget>[
             SizedBox(width: 0.0),
             CircularProfileAvatar(
-              "group imgurl here",
+              group.imgUrl,
               placeHolder: (context, string) { return Image(image: AssetImage("./assets/group_profile_placeholder.png"));},
               borderColor: primaryColor,
               borderWidth: 2.0,

@@ -7,7 +7,7 @@ class QuitAlertDialog  {
   static getQuitAlertDialog(BuildContext c) {
     return AlertDialog(
       title: Text('Warning'),
-      content: Text('Do you really want to exit'),
+      content: Text('Do you really want to exit?'),
       actions: [
         FlatButton(
           child: Text('Yes', style: TextStyle(color: primaryColor)),

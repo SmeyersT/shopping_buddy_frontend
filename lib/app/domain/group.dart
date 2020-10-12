@@ -8,14 +8,14 @@ part 'group.g.dart';
 class Group {
   int id;
   String name;
-  String description;
+  String imgUrl;
   List<GroupMember> groupMembers;
   ShoppingCart shoppingCart;
 
   Group(
       this.id,
       this.name,
-      this.description,
+      this.imgUrl,
       this.groupMembers,
       this.shoppingCart
       );

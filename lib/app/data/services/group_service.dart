@@ -5,6 +5,7 @@ import 'package:http/io_client.dart';
 import 'package:shopping_buddy_frontend/app/domain/group.dart';
 import 'package:shopping_buddy_frontend/app/domain/user.dart';
 import 'package:shopping_buddy_frontend/core/utils/converters/json_to_type_converter.dart';
+import 'package:shopping_buddy_frontend/core/utils/interceptors/jwt_interceptor.dart';
 import 'package:shopping_buddy_frontend/core/values/globals.dart';
 
 part 'group_service.chopper.dart';
@@ -22,18 +23,31 @@ abstract class GroupService extends ChopperService {
       converter: JsonToTypeConverter(
           {Group: (jsonData) => Group.fromJson(jsonData)}
       ),
-      //interceptors: [JWTInterceptor()]
+      interceptors: [JWTInterceptor()]
     );
     return _$GroupService(client);
   }
 
   @Post(path: '/createNewGroup')
-  Future<Response<Group>> createNewGroup(@Body() Group group);
+  Future<Response<Group>> createNewGroup([
+    @Header('Authorization') String idToken,
+    @Body() Group group
+  ]);
 
   @Get(path: '/getGroupsByUser')
-  Future<Response<List<Group>>> getGroupsByUser(@Body() User user);
+  Future<Response<List<Group>>> getGroupsByUser([
+      @Header('Authorization') String idToken
+  ]);
 
   @Get(path: '/searchGroups')
-  Future<Response<List<Group>>> searchGroups(@Body() String searchInput);
+  Future<Response<List<Group>>> searchGroups([
+    @Header('Authorization') String idToken,
+    @Body() String searchInput]);
+
+  @Post(path: '/deleteGroup')
+  Future<Response<Group>> deleteGroup([
+    @Header('Authorization') String idToken,
+    @Body() Group group
+  ]);
 
 }

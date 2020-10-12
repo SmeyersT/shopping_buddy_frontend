@@ -6,7 +6,9 @@ import 'package:shopping_buddy_frontend/app/presentation/screens/group_detail_sc
 import 'package:shopping_buddy_frontend/app/presentation/screens/group_finder_screen.dart';
 import 'package:shopping_buddy_frontend/app/presentation/screens/groups_screen.dart';
 import 'package:shopping_buddy_frontend/app/presentation/screens/home_screen.dart';
+import 'package:shopping_buddy_frontend/app/presentation/screens/login_screen.dart';
 import 'package:shopping_buddy_frontend/app/presentation/screens/shoppinglists_screen.dart';
+import 'package:shopping_buddy_frontend/app/presentation/screens/websocket_test_screen.dart';
 
 class RouteGenerator {
 
@@ -14,7 +16,10 @@ class RouteGenerator {
     final args = settings.arguments;
 
     switch (settings.name) {
-      case '/': return PageRouteBuilder(
+      case '/login': return PageRouteBuilder(
+          pageBuilder: (context, animation1, animation2) => LoginScreen()
+      );
+      case '/home': return PageRouteBuilder(
         pageBuilder: (context, animation1, animation2) => HomeScreen()
       );
       case '/shoppinglists': return PageRouteBuilder(
@@ -25,7 +30,7 @@ class RouteGenerator {
       );
       case '/groupfinder': return PageTransition(
         child: GroupFinderScreen(),
-        type: PageTransitionType.downToUp
+        type: PageTransitionType.bottomToTop
       );
       case '/addgroup': return PageTransition(
         child: AddGroupScreen(),

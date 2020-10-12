@@ -10,7 +10,7 @@ Group _$GroupFromJson(Map<String, dynamic> json) {
   return Group(
     json['id'] as int,
     json['name'] as String,
-    json['description'] as String,
+    json['imgUrl'] as String,
     (json['groupMembers'] as List)
         ?.map((e) =>
             e == null ? null : GroupMember.fromJson(e as Map<String, dynamic>))
@@ -24,7 +24,7 @@ Group _$GroupFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'description': instance.description,
+      'imgUrl': instance.imgUrl,
       'groupMembers': instance.groupMembers,
       'shoppingCart': instance.shoppingCart,
     };

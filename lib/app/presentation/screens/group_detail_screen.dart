@@ -58,7 +58,7 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
                   SizedBox(height: size.height*0.05),
                   Center(
                     child: CircularProfileAvatar(
-                      "imgUrl here",
+                      widget.group.imgUrl,
                       placeHolder: (context, string) { return Image(image: AssetImage("./assets/group_profile_placeholder.png"));},
                       borderColor: primaryColor,
                       borderWidth: 2.0,
@@ -71,10 +71,17 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
                       widget.group.name,
                       style: TextStyle(
                         fontSize: 42.0,
+                        fontWeight: FontWeight.bold
                       ),
                     ),
                   ),
-                  SizedBox(height: 20.0),
+                  SizedBox(
+                      height: 20.0,
+                    child: Container(
+                      decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.black12))),
+                    ),
+                  ),
+                  SizedBox(height: 15.0),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
@@ -136,7 +143,7 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
   void _onJoinGroup() async {
     GroupMember _newGroupMember = new GroupMember(0, GroupRole.MEMBER, _userStore.currentUser, widget.group);
     await _groupMemberStore.createNewGroupMember(_newGroupMember);
-    _groupStore.getUserGroups(_userStore.currentUser);
+    _groupStore.getUserGroups();
     widget.group.groupMembers.add(_groupMemberStore.createdGroupMember);
     setState(() {
       _isMember = true;
@@ -161,12 +168,18 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
     );
   }
 
+  void _onLeaveGroup(GroupMember groupMember) async {
+    await _groupMemberStore.deleteGroupMember(groupMember.id);
+    await _groupStore.getUserGroups();
+    Navigator.pushNamedAndRemoveUntil(context, '/groups', ModalRoute.withName('/groups'));
+  }
+
   Widget _buildDeleteGroupButton(Size size) {
     return SizedBox(
       width: size.width*0.9,
       child: FlatButton(
         onPressed: () {
-          print("Todo: groep verwijderen implementeren.");
+          _onDeleteGroup();
           //Navigator.pop(context);
         },
         shape: ContinuousRectangleBorder(side: BorderSide(color: Colors.red)),
@@ -177,10 +190,10 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
       ),
     );
   }
-  
-  void _onLeaveGroup(GroupMember groupMember) async {
-    await _groupMemberStore.deleteGroupMember(groupMember.id);
-    await _groupStore.getUserGroups(_userStore.currentUser);
+
+  void _onDeleteGroup() async {
+    await _groupStore.deleteGroup(widget.group);
+    await _groupStore.getUserGroups();
     Navigator.pushNamedAndRemoveUntil(context, '/groups', ModalRoute.withName('/groups'));
   }
 

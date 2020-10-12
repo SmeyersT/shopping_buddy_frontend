@@ -11,6 +11,10 @@ class LoginStore = _LoginStoreBase with _$LoginStore;
 
 abstract class _LoginStoreBase with Store {
   final UserStore _userStore = serviceLocator.get<UserStore>();
+  final GoogleHelper _googleHelper = serviceLocator.get<GoogleHelper>();
+
+  @observable
+  bool isSignedIn = true;
 
   @observable
   bool isSigningIn = false;
@@ -18,7 +22,8 @@ abstract class _LoginStoreBase with Store {
   @action
   _setSigningIn(bool value) => isSigningIn = value;
 
-  final GoogleHelper _googleHelper = serviceLocator.get<GoogleHelper>();
+  @action
+  _setSignedIn(bool value) => isSignedIn = value;
 
   void signOut(BuildContext context) {
     _googleHelper.googleSignIn.signOut();
@@ -29,8 +34,17 @@ abstract class _LoginStoreBase with Store {
   Future<void> signIn(BuildContext context) async {
     _setSigningIn(true);
     bool isLoggedIn = await _googleHelper.signInWithGoogle();
-    if (isLoggedIn) Navigator.pushReplacementNamed(context, '/');
+    if (isLoggedIn) Navigator.pushReplacementNamed(context, '/home');
     _setSigningIn(false);
+  }
+
+  Future<void> signInSilently(BuildContext context) async {
+    bool alreadySignedIn = await _googleHelper.isSignedIn();
+    _setSignedIn(alreadySignedIn);
+    if (isSignedIn) {
+      await _googleHelper.signInSilently();
+      Navigator.pushReplacementNamed(context, '/home');
+    }
   }
 
 }

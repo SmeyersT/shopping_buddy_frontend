@@ -17,9 +17,10 @@ class _$UserService extends UserService {
   final definitionType = UserService;
 
   @override
-  Future<Response<User>> getCurrentUser() {
+  Future<Response<User>> getCurrentUser([String idToken]) {
     final $url = '/user/getCurrentUser';
-    final $request = Request('GET', $url, client.baseUrl);
+    final $headers = {'Authorization': idToken};
+    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
     return client.send<User, User>($request);
   }
 }

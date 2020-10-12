@@ -35,11 +35,11 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
             ),
             BottomNavigationBarItem(
                 icon: Icon(Icons.shopping_cart),
-                title: Text("Lists")
+                title: Text("Boodschappen")
             ),
             BottomNavigationBarItem(
                 icon: Icon(Icons.people),
-                title: Text("Groups")
+                title: Text("Groepen")
             )
           ],
         );

@@ -1,18 +1,17 @@
 import 'dart:ui';
 
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
-import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:shopping_buddy_frontend/app/domain/group.dart';
 import 'package:shopping_buddy_frontend/app/domain/shopping_cart.dart';
 import 'package:shopping_buddy_frontend/app/domain/shopping_cart_item.dart';
 import 'package:shopping_buddy_frontend/app/presentation/stores/group_store.dart';
-import 'package:shopping_buddy_frontend/app/presentation/stores/navigation_store.dart';
 import 'package:shopping_buddy_frontend/app/presentation/stores/shopping_cart_store.dart';
 import 'package:shopping_buddy_frontend/app/presentation/stores/user_store.dart';
 import 'package:shopping_buddy_frontend/app/presentation/widgets/custom_app_bar.dart';
 import 'package:shopping_buddy_frontend/app/presentation/widgets/custom_bottom_nav_bar.dart';
+import 'package:shopping_buddy_frontend/app/presentation/widgets/custom_drawer.dart';
 import 'package:shopping_buddy_frontend/app/presentation/widgets/quit_alert_dialog.dart';
 import 'package:shopping_buddy_frontend/core/di/service_locator.dart';
 import 'package:shopping_buddy_frontend/core/values/colors.dart';
@@ -42,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
       print("Retrieving current user.");
     }
     if (_groupStore.userGroups == null) {
-      await _groupStore.getUserGroups(_userStore.currentUser);
+      await _groupStore.getUserGroups();
       print("Retrieving user groups.");
     }
   }
@@ -84,32 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
               }
             ),
           ),
-          drawer: Drawer(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  height: 100,
-                  color: primaryColor,
-                  child: _userStore.currentUser != null? Padding(
-                    padding: const EdgeInsetsDirectional.only(start: 16.0),
-                    child: Row(
-                      children: <Widget>[
-                        CircularProfileAvatar(
-                          _userStore.currentUser.imgUrl,
-                          radius: 35.0,
-                        ),
-                        SizedBox(width: 16.0),
-                        Text(
-                          _userStore.currentUser.firstName + " " + _userStore.currentUser.lastName,
-                          style: TextStyle(fontSize: 24.0, color: Colors.white, fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ) : SizedBox.shrink(),
-                )
-              ],
-            ),
-          ),
+          drawer: CustomDrawer(),
           bottomNavigationBar: CustomBottomNavBar(),
         ),
       ),
@@ -140,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
             width: addItemIsOpen ? size.width * 0.8 : 160,
             decoration: addItemIsOpen
                 ? BoxDecoration(
-                    border: Border.all(color: primaryColor, width: 2.5),
+                    border: Border.all(color: primaryColor, width: 4),
                     borderRadius: BorderRadius.circular(50.0),
                     color: Color.fromRGBO(255, 255, 255, 0.8),
                   )
@@ -201,8 +175,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   CircularProfileAvatar(
                                     _userStore.currentUser.imgUrl,
                                     placeHolder: (context, string) { return Image(image: AssetImage("./assets/group_profile_placeholder.png"));},
-                                    borderColor:  primaryColor,
-                                    borderWidth: _selectedShoppingCart.id == _userStore.currentUser.personalShoppingCart.id? 2.0 : 0.0,
+                                    borderColor:  secondaryColor,
+                                    borderWidth: _selectedShoppingCart.id == _userStore.currentUser.personalShoppingCart.id? 3.0 : 0.0,
                                     radius: 20.0,
                                   ),
                                   Padding(
@@ -263,14 +237,14 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _onAddShoppingItem(BuildContext context) {
+  void _onAddShoppingItem(BuildContext context) async {
     if(_shoppingItemController.text.isNotEmpty) {
       ShoppingCartItem newShoppingItem = new ShoppingCartItem(
           0, 1, DateTime.now(), false, false, _shoppingItemController.text);
-      _selectedShoppingCart.items.add(newShoppingItem);
-      _shoppingCartStore
-          .updateShoppingCart(_selectedShoppingCart);
+      //_selectedShoppingCart.items.add(newShoppingItem);
+      await _shoppingCartStore.addItemToCart(_selectedShoppingCart, newShoppingItem);
       _shoppingItemController.clear();
+      _selectedShoppingCart.items = _shoppingCartStore.updatedShoppingCart.items;
       setState(() {
         addItemIsOpen = false;
       });
@@ -292,10 +266,10 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: <Widget>[
             CircularProfileAvatar(
-              "group imgUrl here",
+              group.imgUrl,
               placeHolder: (context, string) { return Image(image: AssetImage("./assets/group_profile_placeholder.png"));},
-              borderColor:  primaryColor,
-              borderWidth: _selectedShoppingCart.id == group.shoppingCart.id? 2.0 : 0.0,
+              borderColor:  secondaryColor,
+              borderWidth: _selectedShoppingCart.id == group.shoppingCart.id? 3.0 : 0.0,
               radius: 20.0,
             ),
             Padding(

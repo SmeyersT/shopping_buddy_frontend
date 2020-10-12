@@ -1,4 +1,4 @@
-package tom.smeyers.shopping_buddy_frontend
+package be.tom.shoppingbuddy
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
