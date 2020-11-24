@@ -148,6 +148,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.5"
+  christian_picker_image:
+    dependency: "direct main"
+    description:
+      name: christian_picker_image
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.8"
   circular_profile_avatar:
     dependency: "direct main"
     description:
@@ -651,6 +658,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.10.0-nullsafety.1"
+  stomp_dart_client:
+    dependency: "direct main"
+    description:
+      name: stomp_dart_client
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.7"
   stream_channel:
     dependency: transitive
     description:
