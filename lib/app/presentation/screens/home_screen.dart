@@ -214,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: primaryColor,
                             child: Text(
                               "Boodschap toevoegen",
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(color: whiteColor),
                             ),
                           );
                         }
@@ -240,7 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onAddShoppingItem(BuildContext context) async {
     if(_shoppingItemController.text.isNotEmpty) {
       ShoppingCartItem newShoppingItem = new ShoppingCartItem(
-          0, 1, DateTime.now(), false, false, _shoppingItemController.text);
+          0, false, _shoppingItemController.text);
       //_selectedShoppingCart.items.add(newShoppingItem);
       await _shoppingCartStore.addItemToCart(_selectedShoppingCart, newShoppingItem);
       _shoppingItemController.clear();

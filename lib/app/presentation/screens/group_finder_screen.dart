@@ -189,6 +189,14 @@ class _GroupFinderScreenState extends State<GroupFinderScreen> {
                         maxLines: 1,
                         controller: _searchController,
                         cursorColor: primaryColor,
+                        textInputAction: TextInputAction.search,
+                        onSubmitted: (input) {
+                          if(input != null && input != "") {
+                            _groupStore.searchGroups(input);
+                            SystemChannels.textInput.invokeMethod('TextInput.hide');
+                            setState(() { _hasSearched = !_hasSearched;});
+                          }
+                        },
                         style: TextStyle(fontSize: 22),
                         decoration: InputDecoration(
                           focusedBorder: InputBorder.none,

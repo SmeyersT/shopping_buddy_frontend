@@ -19,17 +19,20 @@ class GroupsScreen extends StatefulWidget {
 }
 
 class _GroupsScreenState extends State<GroupsScreen> {
-  final NavigationStore _navStore = serviceLocator.get<NavigationStore>();
   final GroupStore _groupStore = serviceLocator.get<GroupStore>();
-  final UserStore _userStore = serviceLocator.get<UserStore>();
 
 
   @override
   void initState() {
-    if(_groupStore.userGroups == null) {
-      _groupStore.getUserGroups();
-    }
+    initGroups();
+    // if(_groupStore.userGroups == null) {
+    //   _groupStore.getUserGroups();
+    // }
     super.initState();
+  }
+
+  void initGroups() async {
+    await _groupStore.getUserGroups();
   }
 
   @override
@@ -76,7 +79,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
                       return Expanded(child: _buildGroupList(size));
                     }
                     else {
-                      return Center(child: CircularProgressIndicator(),);
+                      return Expanded(child: Container(child: Center(child: CircularProgressIndicator(),)));
                     }
                   },
                 ),

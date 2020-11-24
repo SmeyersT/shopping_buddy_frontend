@@ -32,6 +32,8 @@ dependencies:
   page_transition: ^1.1.6
   google_sign_in: ^4.4.6
   web_socket_channel: ^1.1.0
+  stomp_dart_client: ^0.3.7
+  christian_picker_image: ^0.1.8
 
 dev_dependencies:
   flutter_test:
